@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{061DFF4F-1905-154C-ED26-A2696C16311B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -58,6 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\bug.cs" />
+    <Compile Include="Assets\Scripts\codeBase.cs" />
+    <Compile Include="Assets\Scripts\programm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
