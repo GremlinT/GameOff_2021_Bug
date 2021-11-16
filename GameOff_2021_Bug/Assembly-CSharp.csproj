@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\bug.cs" />
     <Compile Include="Assets\Scripts\codeBase.cs" />
     <Compile Include="Assets\Scripts\programm.cs" />
+    <Compile Include="Assets\Scripts\programmer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

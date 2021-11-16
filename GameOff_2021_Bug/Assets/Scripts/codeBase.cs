@@ -61,6 +61,7 @@ public class codeBase : MonoBehaviour
         Destroy(gameObject);
         Debug.Log("enter programm");
     }
+
     private void OnMouseDown()
     {
         DestroyOnClick();
