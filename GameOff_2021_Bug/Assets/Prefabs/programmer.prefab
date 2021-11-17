@@ -198,4 +198,5 @@ MonoBehaviour:
   pathPoints: []
   programmerSpeed: 0
   programmerEffectivnes: 0
+  codePrefab: {fileID: 1480148529614407069, guid: 4b943b7d96bfb4644a193b45246f103b, type: 3}
   LR: {fileID: 5213960926291534448}

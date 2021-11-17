@@ -12,14 +12,14 @@ public class programmer : MonoBehaviour
     int programmerSpeed;
     [SerializeField]
     int programmerEffectivnes;
-
-    private GameObject[] codeTypes = new GameObject[5];
+    [SerializeField]
+    private GameObject codePrefab;
     [SerializeField]
     private LineRenderer LR;
     private bool moreThanZero;
     private void Awake()
     {
-        pathPoints = new Vector3[8];
+        pathPoints = new Vector3[6];
         transform.position = programmerPosition;
         if (programmerPosition.x > 0) moreThanZero = true;
         else moreThanZero = false;
@@ -40,7 +40,7 @@ public class programmer : MonoBehaviour
         int pointY = (int)pathPoints[1].y;
         bool pointXchahged = true;
         bool pointYrise = false;
-        for (int i = 0; i < pathPoints.Length - 4; i++)
+        for (int i = 0; i < pathPoints.Length - 2; i++)
         {
             int changePointX = Random.Range(0, 2);
             if (changePointX == 0)
@@ -87,13 +87,29 @@ public class programmer : MonoBehaviour
         LR.SetPosition(6, new Vector2(0, pathPoints[5].y));
         LR.SetPosition(7, Vector3.zero);
     }
+    private float codeTimer = 5;
+
     void CodeGenerate()
     {
-
+        codeTimer -= Time.deltaTime;
+        if (codeTimer <= 0)
+        {
+            GameObject code = (GameObject) Instantiate(codePrefab);
+            codeBase cb = code.GetComponent<codeBase>();
+            cb.startPoint = programmerPosition;
+            Vector2[] ppV2 = new Vector2[8];
+            for (int i = 0; i < LR.positionCount - 2; i++)
+            {
+                ppV2[i] = LR.GetPosition(i+1);
+            }
+            cb.movePoints.AddRange(ppV2);
+            //характеристики кода
+            codeTimer = 5;
+        }
     }
 
     private void Update()
     {
-        
+        CodeGenerate();
     }
 }

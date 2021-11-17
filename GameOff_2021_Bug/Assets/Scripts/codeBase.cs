@@ -6,15 +6,15 @@ public class codeBase : MonoBehaviour
 {
     [SerializeField]
     float speed;
-    [SerializeField]
-    List<Vector2> movePoints;
-    [SerializeField]
-    Vector2 startPoint;
+    
+    public List<Vector2> movePoints;
+    
+    public Vector2 startPoint;
 
     private int nextPoint;
     private Transform tr;
     private float minDist;
-    
+        
     public int force;
 
     private void Awake()
@@ -22,6 +22,9 @@ public class codeBase : MonoBehaviour
         nextPoint = 0;
         tr = transform;
         minDist = 0.001f;
+    }
+    private void Start()
+    {
         tr.position = startPoint;
     }
     private void MoveToPoint()
@@ -70,5 +73,7 @@ public class codeBase : MonoBehaviour
     {
         MoveToPoint();
     }
+
+ 
 
 }
