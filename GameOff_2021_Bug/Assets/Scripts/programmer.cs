@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class programmer : MonoBehaviour
 {
-    [SerializeField]
-    Vector2 programmerPosition;
+    
+    public Vector2 programmerPosition;
     [SerializeField]
     Vector3[] pathPoints;
     [SerializeField]
@@ -13,33 +13,60 @@ public class programmer : MonoBehaviour
     [SerializeField]
     int programmerEffectivnes;
     [SerializeField]
-    private GameObject codePrefab;
+    GameObject codePrefab;
     [SerializeField]
-    private LineRenderer LR;
-    private bool moreThanZero;
-    private void Awake()
+    LineRenderer LR;
+    bool moreThanZero;
+    [SerializeField]
+    int maxYpoint, minYpoint;
+
+    private void Start()
     {
         pathPoints = new Vector3[6];
         transform.position = programmerPosition;
         if (programmerPosition.x > 0) moreThanZero = true;
         else moreThanZero = false;
         pathPoints[0] = programmerPosition;
-        if(moreThanZero) pathPoints[1] = new Vector2(programmerPosition.x - 1, programmerPosition.y);
+        if (moreThanZero) pathPoints[1] = new Vector2(programmerPosition.x - 1, programmerPosition.y);
         else pathPoints[1] = new Vector2(programmerPosition.x + 1, programmerPosition.y);
         PathGenerate();
     }
 
-    private void CodeClear()
+    bool pointYrise = false;
+    private int YpathRise(int pointY)
     {
-
+        if (pointY < maxYpoint)
+        {
+            pointY += Random.Range(1, 2);
+            pointYrise = true;
+        }
+        else
+        {
+            pointY -= Random.Range(1, 2);
+            pointYrise = false;
+        }
+        return pointY;
     }
-
+    private int YpathDown(int pointY)
+    {
+        if (pointY > minYpoint)
+        {
+            pointY -= Random.Range(1, 2);
+            pointYrise = false;
+        }
+        else
+        {
+            pointY += Random.Range(1, 2);
+            pointYrise = true;
+        }
+        return pointY;
+    }
     private void PathGenerate()
     {
         int pointX = (int)pathPoints[1].x;
         int pointY = (int)pathPoints[1].y;
         bool pointXchahged = true;
-        bool pointYrise = false;
+        
         for (int i = 0; i < pathPoints.Length - 2; i++)
         {
             int changePointX = Random.Range(0, 2);
@@ -55,27 +82,40 @@ public class programmer : MonoBehaviour
                 {
                     if (Random.value > 0.5f)
                     {
-                        pointY += Random.Range(1, 2);
-                        pointYrise = true;
+                        pointY = YpathRise(pointY);
                     }
                     else
                     {
-                        pointY -= Random.Range(1, 2);
-                        pointYrise = false;
-                    }
+                        pointY = YpathDown(pointY);
+                    } 
                     pointXchahged = false;
                 }
                 else
                 {
                     if (pointYrise)
                     {
-                        pointY += Random.Range(1, 2);
-                        pointYrise = true;
+                        if (pointY < maxYpoint)
+                        {
+                            pointY += Random.Range(1, 2);
+                            pointYrise = true;
+                        }
+                        else
+                        {
+                            if (moreThanZero) pointX -= 1;
+                            else pointX += 1;
+                            pointXchahged = true;
+                        }
+                    }
+                    else if (pointY > minYpoint)
+                    {
+                        pointY -= Random.Range(1,2);
+                        pointYrise = false;
                     }
                     else
                     {
-                        pointY -= Random.Range(1, 2);
-                        pointYrise = false;
+                        if (moreThanZero) pointX -= 1;
+                        else pointX += 1;
+                        pointXchahged = true;
                     }
                 }
             }
@@ -87,7 +127,8 @@ public class programmer : MonoBehaviour
         LR.SetPosition(6, new Vector2(0, pathPoints[5].y));
         LR.SetPosition(7, Vector3.zero);
     }
-    private float codeTimer = 5;
+    [SerializeField]
+    private float codeTimer = 2;
 
     void CodeGenerate()
     {

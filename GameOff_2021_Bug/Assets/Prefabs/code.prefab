@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b298aa55aba61294d91fbd72072e3a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 5
   movePoints: []
   startPoint: {x: -8, y: 0}
-  force: 1
+  force: 50
