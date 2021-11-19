@@ -23,11 +23,11 @@ public class programm : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("touch");
         codeBase cb = col.gameObject.GetComponent<codeBase>();
         if (cb != null)
         {
             currentReady += cb.force;
+            Debug.Log("new " + cb.force + " of code!");
             cb.DestroyOnEnterProgramm();
             if (currentReady >= finalReady)
             {
