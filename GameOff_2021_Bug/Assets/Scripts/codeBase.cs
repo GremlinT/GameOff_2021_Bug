@@ -25,6 +25,10 @@ public class codeBase : MonoBehaviour
     SpriteRenderer SR;
     [SerializeField]
     ParticleSystem PS;
+    [SerializeField]
+    BoxCollider2D Col;
+
+    public int forceModif;
     
     private void Awake()
     {
@@ -35,7 +39,8 @@ public class codeBase : MonoBehaviour
     private void Start()
     {
         tr.position = startPoint;
-        CodeGenerate(1);
+        CodeGenerate(forceModif);
+        speed = Random.Range(1, 4);
     }
 
     [SerializeField]
@@ -64,33 +69,39 @@ public class codeBase : MonoBehaviour
         SR.sprite = sprites[1];
         var part = PS.main;
         part.startColor = Color.green;
+        part.startSpeed = 1;
+        Col.size = new Vector2(1, 1);
     }
     private void BigBadCode()
     {
         SR.sprite = sprites[4];
         var part = PS.main;
         part.startColor = Color.red;
+        part.startSpeed = 1;
+        Col.size = new Vector2(1, 1);
     }
     private void BigVBadCode()
     {
         SR.sprite = sprites[5];
         var part = PS.main;
         part.startColor = Color.black;
+        part.startSpeed = 1;
+        Col.size = new Vector2(1, 1);
     }
     public void CodeGenerate(int forceModif)
     {
-        int random = Random.Range(1, 10);
+        int random = Random.Range(1, 11);
         if (random < 8) force = defaultForce * forceModif;
         else force = defaultForce * forceModif * bigForce;
         if (random < 5) bugForce = 0;
         else if (random < 8) bugForce = force;
         else if (random > 8) bugForce = force * force;
-        if (force == defaultForce * forceModif && bugForce == 0) SmallClearCode();//SR.sprite = sprites[0]; //чистый маленький код
-        if (force > defaultForce * forceModif && bugForce == 0) BigCleanCode(); // SR.sprite = sprites[1]; //чистый большой код
-        if (force == defaultForce * forceModif && bugForce > 0 && bugForce <= force) SmallBadCode();//SR.sprite = sprites[2]; //маленький код с маленьким багом
-        if (force == defaultForce * forceModif && bugForce > force) SmallVBadCode(); // SR.sprite = sprites[3]; //маленький код с большим багом
-        if (force > defaultForce * forceModif && bugForce <= force) BigBadCode(); // SR.sprite = sprites[4]; //большой код с маленьким багом
-        if (force > defaultForce * forceModif && bugForce > force) BigVBadCode(); // SR.sprite = sprites[5]; //большой код с большим багом
+        if (force == defaultForce * forceModif && bugForce == 0) SmallClearCode();//чистый маленький код
+        if (force > defaultForce * forceModif && bugForce == 0) BigCleanCode(); //чистый большой код
+        if (force == defaultForce * forceModif && bugForce > 0 && bugForce <= force) SmallBadCode();//маленький код с маленьким багом
+        if (force == defaultForce * forceModif && bugForce > force) SmallVBadCode(); //маленький код с большим багом
+        if (force > defaultForce * forceModif && bugForce >0 && bugForce <= force) BigBadCode(); //большой код с маленьким багом
+        if (force > defaultForce * forceModif && bugForce > force) BigVBadCode(); //большой код с большим багом
     }
     private void MoveToPoint()
     {

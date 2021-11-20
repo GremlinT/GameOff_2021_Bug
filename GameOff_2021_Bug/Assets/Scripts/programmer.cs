@@ -20,6 +20,10 @@ public class programmer : MonoBehaviour
     [SerializeField]
     int maxYpoint, minYpoint;
 
+    [SerializeField]
+    SpriteRenderer SR;
+    [SerializeField]
+    Sprite[] programmersType = new Sprite[3];
     private void Start()
     {
         pathPoints = new Vector3[6];
@@ -29,6 +33,9 @@ public class programmer : MonoBehaviour
         pathPoints[0] = programmerPosition;
         if (moreThanZero) pathPoints[1] = new Vector2(programmerPosition.x - 1, programmerPosition.y);
         else pathPoints[1] = new Vector2(programmerPosition.x + 1, programmerPosition.y);
+        programmerEffectivnes = Random.Range(1, 6);
+        programmerSpeed = Random.Range(2, 6);
+        SR.sprite = programmersType[Random.Range(0, 3)];
         PathGenerate();
     }
 
@@ -37,12 +44,12 @@ public class programmer : MonoBehaviour
     {
         if (pointY < maxYpoint)
         {
-            pointY += Random.Range(1, 2);
+            pointY += Random.Range(1, 3);
             pointYrise = true;
         }
         else
         {
-            pointY -= Random.Range(1, 2);
+            pointY -= Random.Range(1, 3);
             pointYrise = false;
         }
         return pointY;
@@ -51,12 +58,12 @@ public class programmer : MonoBehaviour
     {
         if (pointY > minYpoint)
         {
-            pointY -= Random.Range(1, 2);
+            pointY -= Random.Range(1, 3);
             pointYrise = false;
         }
         else
         {
-            pointY += Random.Range(1, 2);
+            pointY += Random.Range(1, 3);
             pointYrise = true;
         }
         return pointY;
@@ -69,7 +76,7 @@ public class programmer : MonoBehaviour
         
         for (int i = 0; i < pathPoints.Length - 2; i++)
         {
-            int changePointX = Random.Range(0, 2);
+            int changePointX = Random.Range(0, 3);
             if (changePointX == 0)
             {
                 if (moreThanZero) pointX -= 1;
@@ -96,7 +103,7 @@ public class programmer : MonoBehaviour
                     {
                         if (pointY < maxYpoint)
                         {
-                            pointY += Random.Range(1, 2);
+                            pointY += Random.Range(1, 3);
                             pointYrise = true;
                         }
                         else
@@ -108,7 +115,7 @@ public class programmer : MonoBehaviour
                     }
                     else if (pointY > minYpoint)
                     {
-                        pointY -= Random.Range(1,2);
+                        pointY -= Random.Range(1,3);
                         pointYrise = false;
                     }
                     else
@@ -144,8 +151,9 @@ public class programmer : MonoBehaviour
                 ppV2[i] = LR.GetPosition(i+1);
             }
             cb.movePoints.AddRange(ppV2);
+            cb.forceModif = programmerEffectivnes;
             //характеристики кода
-            codeTimer = 5;
+            codeTimer = programmerSpeed;
         }
     }
 

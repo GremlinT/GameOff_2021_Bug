@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class programm : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class programm : MonoBehaviour
     [SerializeField]
     private Vector2[] programmerPositions = new Vector2[8];
     private int currentProgrammerPosition;
+    [SerializeField]
+    Text versionText;
 
     private void Awake()
     {
@@ -19,15 +22,18 @@ public class programm : MonoBehaviour
         finalReady = 100;
         currentReady = 0;
         currentProgrammerPosition = 0;
+        versionText.text = "V." + version;
+        percentReady = 0;
+        percentBuggy = 0;
     }
 
+    int percentReady, percentBuggy;
     private void OnCollisionEnter2D(Collision2D col)
     {
         codeBase cb = col.gameObject.GetComponent<codeBase>();
         if (cb != null)
         {
             currentReady += cb.force;
-            Debug.Log("new " + cb.force + " of code!");
             cb.DestroyOnEnterProgramm();
             if (currentReady >= finalReady)
             {
@@ -40,6 +46,7 @@ public class programm : MonoBehaviour
     private void NewVersion()
     {
         version += 1;
+        versionText.text = "V." + version;
         if (currentProgrammerPosition < programmerPositions.Length) AddProgrammer();
     }
 
