@@ -6,7 +6,9 @@ public class codeBase : MonoBehaviour
 {
     [SerializeField]
     float speed;
-    
+
+    [SerializeField]
+    programm PR;
     public List<Vector2> movePoints;
     
     public Vector2 startPoint;
@@ -18,7 +20,7 @@ public class codeBase : MonoBehaviour
     int defaultForce;
     public int force;
 
-    private int bugForce;
+    public int bugForce;
     [SerializeField]
     Sprite[] sprites = new Sprite[6];
     [SerializeField]
@@ -32,6 +34,7 @@ public class codeBase : MonoBehaviour
     
     private void Awake()
     {
+        PR = FindObjectOfType<programm>();
         nextPoint = 0;
         tr = transform;
         minDist = 0.001f;
@@ -41,6 +44,7 @@ public class codeBase : MonoBehaviour
         tr.position = startPoint;
         CodeGenerate(forceModif);
         speed = Random.Range(1, 4);
+        realSpeed = speed;
     }
 
     [SerializeField]
@@ -140,11 +144,22 @@ public class codeBase : MonoBehaviour
     {
         DestroyOnClick();
     }
+
+    float realSpeed;
+    
+    private void SlowMovement()
+    {
+       speed = 0.2f;
+    }
     private void FixedUpdate()
     {
-        MoveToPoint();
+        if (PR.allDie) Destroy(gameObject);
+        if (!PR.allStop) MoveToPoint();
+        if (PR.allSlow) SlowMovement(); else speed = realSpeed;
+         
     }
 
+  
  
 
 }

@@ -24,6 +24,13 @@ public class programmer : MonoBehaviour
     SpriteRenderer SR;
     [SerializeField]
     Sprite[] programmersType = new Sprite[3];
+
+    programm PR;
+
+    private void Awake()
+    {
+        PR = FindObjectOfType<programm>();
+    }
     private void Start()
     {
         pathPoints = new Vector3[6];
@@ -159,6 +166,6 @@ public class programmer : MonoBehaviour
 
     private void Update()
     {
-        CodeGenerate();
+        if(!PR.allDie) CodeGenerate();
     }
 }
