@@ -125,10 +125,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  PR: {fileID: 0}
   movePoints: []
   startPoint: {x: -8, y: 0}
-  defaultForce: 5
+  defaultForce: 9
   force: 1
+  bugForce: 0
   sprites:
   - {fileID: 21300000, guid: 84efc0cde0f73ea4b987f80ae6746c02, type: 3}
   - {fileID: 21300000, guid: be8985a745568bd4daeb762cfe7e1ad5, type: 3}

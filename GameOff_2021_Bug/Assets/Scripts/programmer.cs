@@ -4,28 +4,35 @@ using UnityEngine;
 
 public class programmer : MonoBehaviour
 {
-    
     public Vector2 programmerPosition;
+    
     [SerializeField]
     Vector3[] pathPoints;
-    [SerializeField]
-    int programmerSpeed;
-    [SerializeField]
-    int programmerEffectivnes;
-    [SerializeField]
-    GameObject codePrefab;
-    [SerializeField]
-    LineRenderer LR;
-    bool moreThanZero;
     [SerializeField]
     int maxYpoint, minYpoint;
 
     [SerializeField]
-    SpriteRenderer SR;
+    int programmerSpeed;
+    [SerializeField]
+    int programmerEffectivnes;
+    
+    [SerializeField]
+    GameObject codePrefab;
+    
     [SerializeField]
     Sprite[] programmersType = new Sprite[3];
 
+    [SerializeField]
+    LineRenderer LR;
+    [SerializeField]
+    SpriteRenderer SR;
     programm PR;
+
+    bool moreThanZero;
+    bool pointYrise = false;
+
+    [SerializeField]
+    private float codeTimer;
 
     private void Awake()
     {
@@ -46,7 +53,6 @@ public class programmer : MonoBehaviour
         PathGenerate();
     }
 
-    bool pointYrise = false;
     private int YpathRise(int pointY)
     {
         if (pointY < maxYpoint)
@@ -141,8 +147,7 @@ public class programmer : MonoBehaviour
         LR.SetPosition(6, new Vector2(0, pathPoints[5].y));
         LR.SetPosition(7, Vector3.zero);
     }
-    [SerializeField]
-    private float codeTimer = 2;
+    
 
     void CodeGenerate()
     {
@@ -159,13 +164,12 @@ public class programmer : MonoBehaviour
             }
             cb.movePoints.AddRange(ppV2);
             cb.forceModif = programmerEffectivnes;
-            //характеристики кода
             codeTimer = programmerSpeed;
         }
     }
 
     private void Update()
     {
-        if(!PR.allDie) CodeGenerate();
+        if(!PR.allStop) CodeGenerate();
     }
 }

@@ -5,29 +5,117 @@ using UnityEngine.UI;
 
 public class programm : MonoBehaviour
 {
-    private int currentReady;
-    private int finalReady;
+    int currentReady;
+    int finalReady;
+
     int currentBugs;
-    private int maxBugs;
-    private int version;
-    [SerializeField]
-    private GameObject programmer;
-    [SerializeField]
-    private Vector2[] programmerPositions = new Vector2[8];
-    private int currentProgrammerPosition;
+    int maxBugs;
+
+    int version;
     [SerializeField]
     Text versionText;
+    bool newVersion;
+
+    [SerializeField]
+    GameObject programmer;
+    
+    [SerializeField]
+    Vector2[] programmerPositions = new Vector2[8];
+    int currentProgrammerPosition;
+    
     [SerializeField]
     SpriteRenderer[] finSprites = new SpriteRenderer[10];
     [SerializeField]
     SpriteRenderer[] bugSprites = new SpriteRenderer[10];
 
+    [SerializeField]
+    int riseOfHardnes;
+    
     public bool allStop;
     public bool allDie;
     public bool allSlow;
-    public bool gameOver;
+    
+    [SerializeField]
+    float slowTime;
+    float slowTimer;
+
+    [SerializeField]
+    float energoTime;
+    float energoTimer;
+    [SerializeField]
+    float dieTime;
+    float dieTimer;
+    bool alreadyAllDie;
+
+    [SerializeField]
+    Text slowButtonText;
+    [SerializeField]
+    Text energoButtonText;
+
+    bool energoButtonClick;
+    bool slowButtonClick;
+
+    public int score;
+    [SerializeField]
+    Text scoreText;
+
+    int percentReady, percentBuggy;
+
+    public void EnergoButtonClick()
+    {
+        energoButtonClick = true;
+    }
+
+    private void AllDie()
+    {
+        energoButtonText.text = energoTimer.ToString("0.0");
+        dieTimer -= Time.deltaTime;
+        if (!alreadyAllDie)
+        {
+            allDie = true;
+            alreadyAllDie = true;
+        }
+        else if (dieTimer < 0 && allDie)
+        {
+            allDie = false;
+        }
+            
+        energoTimer -= Time.deltaTime;
+        if (energoTimer < 0)
+        {
+            energoTimer = energoTime;
+            alreadyAllDie = false;
+            energoButtonClick = false;
+            dieTimer = dieTime;
+            energoButtonText.text = "";
+        }
+    }
+    
+    public void SlowButtonClick()
+    {
+        slowButtonClick = true;
+    }
+    private void AllSlow()
+    {
+        slowButtonText.text = slowTimer.ToString("0.0");
+        if (slowTimer >= slowTime)
+        {
+            allSlow = true;
+        }
+        if (slowTimer > 0) slowTimer -= Time.deltaTime;
+        if (slowTimer <= 0)
+        {
+            allSlow = false;
+            slowTimer = slowTime;
+            slowButtonClick = false;
+            slowButtonText.text = "";
+        }
+    }
+
+
     private void Awake()
     {
+        score = 0;
         version = 1;
         finalReady = 100;
         maxBugs = 100;
@@ -37,9 +125,24 @@ public class programm : MonoBehaviour
         versionText.text = "V." + version;
         percentReady = 0;
         percentBuggy = 0;
+        slowTimer = slowTime;
+        energoTimer = energoTime;
     }
-
-    int percentReady, percentBuggy;
+    
+    private void Update()
+    {
+        if (slowButtonClick) AllSlow();
+        if (energoButtonClick) AllDie();
+        PercentInfoOnScreen(percentReady, finSprites);
+        PercentInfoOnScreen(percentBuggy, bugSprites);
+        if (newVersion)
+        {
+            PercentOnScreenOff();
+            newVersion = false;
+        }
+        scoreText.text = "Score: " + score.ToString();
+    }
+    
     
     private void PercentInfoOnScreen(int percent, SpriteRenderer[] SR)
     {
@@ -62,6 +165,7 @@ public class programm : MonoBehaviour
             bugSprites[i].enabled = false;
         }
     }
+    
     private void OnCollisionEnter2D(Collision2D col)
     {
         codeBase cb = col.gameObject.GetComponent<codeBase>();
@@ -70,32 +174,41 @@ public class programm : MonoBehaviour
             currentReady += cb.force;
             currentBugs += cb.bugForce;
             percentReady = currentReady * 100 / finalReady;
-            PercentInfoOnScreen(percentReady, finSprites);
+            
             percentBuggy = currentBugs * 100 / maxBugs;
-            PercentInfoOnScreen(percentBuggy, bugSprites);
+            
             Debug.Log("Ready % = " + percentReady + ". Bug % = " + percentBuggy);
             cb.DestroyOnEnterProgramm();
             if (currentBugs > maxBugs)
             {
-                Debug.Log("AAAAA!!!");
-                allStop = true;
-                allDie = true;
+                GameOver();
             }
             if (currentReady >= finalReady)
             {
+                newVersion = true;
                 NewVersion();
                 currentReady = 0;
+                percentReady = 0;
                 currentBugs = 0;
-                PercentOnScreenOff();
+                percentBuggy = 0;
+                
             }
         }
     }
 
+    private void GameOver()
+    {
+        Debug.Log("AAAAA!!!");
+        allStop = true;
+        allDie = true;
+    }
     private void NewVersion()
     {
         version += 1;
+        finalReady = finalReady + riseOfHardnes;
         versionText.text = "V." + version;
         if (currentProgrammerPosition < programmerPositions.Length) AddProgrammer();
+        
     }
 
     private void AddProgrammer()

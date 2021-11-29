@@ -9,20 +9,26 @@ public class codeBase : MonoBehaviour
 
     [SerializeField]
     programm PR;
-    public List<Vector2> movePoints;
     
+    public List<Vector2> movePoints;
     public Vector2 startPoint;
-
+    
     private int nextPoint;
+    
     private Transform tr;
     private float minDist;
+    
     [SerializeField]    
     int defaultForce;
+    [SerializeField]
+    int bigForce;
+    
     public int force;
-
     public int bugForce;
+    
     [SerializeField]
     Sprite[] sprites = new Sprite[6];
+    
     [SerializeField]
     SpriteRenderer SR;
     [SerializeField]
@@ -43,30 +49,30 @@ public class codeBase : MonoBehaviour
     {
         tr.position = startPoint;
         CodeGenerate(forceModif);
-        speed = Random.Range(1, 4);
+        speed = Random.Range(2, 4);
         realSpeed = speed;
     }
-
-    [SerializeField]
-    int bigForce;
-
+    
     private void SmallClearCode()
     {
         SR.sprite = sprites[0];
         var part = PS.main;
         part.startColor = Color.green;
+        variant = 1;
     }
     private void SmallBadCode()
     {
         SR.sprite = sprites[2];
         var part = PS.main;
         part.startColor = Color.red;
+        variant = 2;
     }
     private void SmallVBadCode()
     {
         SR.sprite = sprites[3];
         var part = PS.main;
         part.startColor = Color.black;
+        variant = 3;
     }
     private void BigCleanCode()
     {
@@ -75,6 +81,7 @@ public class codeBase : MonoBehaviour
         part.startColor = Color.green;
         part.startSpeed = 1;
         Col.size = new Vector2(1, 1);
+        variant = 4;
     }
     private void BigBadCode()
     {
@@ -83,6 +90,7 @@ public class codeBase : MonoBehaviour
         part.startColor = Color.red;
         part.startSpeed = 1;
         Col.size = new Vector2(1, 1);
+        variant = 5;
     }
     private void BigVBadCode()
     {
@@ -91,21 +99,55 @@ public class codeBase : MonoBehaviour
         part.startColor = Color.black;
         part.startSpeed = 1;
         Col.size = new Vector2(1, 1);
+        variant = 6;
     }
+    private int variant;
     public void CodeGenerate(int forceModif)
     {
-        int random = Random.Range(1, 11);
-        if (random < 8) force = defaultForce * forceModif;
-        else force = defaultForce * forceModif * bigForce;
-        if (random < 5) bugForce = 0;
-        else if (random < 8) bugForce = force;
-        else if (random > 8) bugForce = force * force;
-        if (force == defaultForce * forceModif && bugForce == 0) SmallClearCode();//чистый маленький код
-        if (force > defaultForce * forceModif && bugForce == 0) BigCleanCode(); //чистый большой код
-        if (force == defaultForce * forceModif && bugForce > 0 && bugForce <= force) SmallBadCode();//маленький код с маленьким багом
-        if (force == defaultForce * forceModif && bugForce > force) SmallVBadCode(); //маленький код с большим багом
-        if (force > defaultForce * forceModif && bugForce >0 && bugForce <= force) BigBadCode(); //большой код с маленьким багом
-        if (force > defaultForce * forceModif && bugForce > force) BigVBadCode(); //большой код с большим багом
+        int randomSize = Random.Range(1, 6);
+        bool small = false;
+        bool big = false;
+        bool clear = false;
+        bool bad = false;
+        bool vBad = false;
+        if (randomSize < 4)
+        {
+            small = true;
+            force = defaultForce + forceModif; //9 + 1 = 10
+        }
+        else
+        {
+            big = true;
+            force = (defaultForce + forceModif) * bigForce; //9+1*2 = 20
+        }
+        int randomBForce = Random.Range(1, 7);
+        if (randomBForce <= 3)
+        {
+            clear = true;
+            bugForce = 0;
+        }
+        else if (randomBForce <= 5)
+        {
+            bad = true;
+            bugForce = force + force / 2; //10 + 5 = 15; 20+10 = 30
+        }
+        else if (randomBForce > 5)
+        {
+            vBad = true;
+            bugForce = force + (int)((float)force * 1.5f); //10+15=25; 20+30= 50
+        }
+        if (small)
+        {
+            if (clear) SmallClearCode();
+            if (bad) SmallBadCode();
+            if (vBad) SmallVBadCode();
+        }
+        if (big)
+        {
+            if (clear) BigCleanCode();
+            if (bad) BigBadCode();
+            if (vBad) BigVBadCode();
+        }
     }
     private void MoveToPoint()
     {
@@ -132,7 +174,29 @@ public class codeBase : MonoBehaviour
     private void DestroyOnClick()
     {
         Destroy(gameObject);
-        Debug.Log("click");
+        switch (variant)
+        {
+            case 1:
+                PR.score -= 1;
+                break;
+            case 2:
+                PR.score += 1;
+                break;
+            case 3:
+                PR.score += 3;
+                break;
+            case 4:
+                PR.score -= 2;
+                break;
+            case 5:
+                PR.score += 2;
+                break;
+            case 6:
+                PR.score += 4;
+                break;
+            default:
+                break;
+        }
     }
     
     public void DestroyOnEnterProgramm()
