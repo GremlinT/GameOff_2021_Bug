@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class programm : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class programm : MonoBehaviour
     [SerializeField]
     float slowTime;
     float slowTimer;
+    [SerializeField]
+    float slowRepeatTime, slowRepeatTimer;
+    bool alreadySlow;
 
     [SerializeField]
     float energoTime;
@@ -58,28 +62,37 @@ public class programm : MonoBehaviour
     public int score;
     [SerializeField]
     Text scoreText;
+    [SerializeField]
+    Text readyText, bugedText;
 
     int percentReady, percentBuggy;
 
+    [SerializeField]
+    GameObject gameOver;
+        
+    public GameObject pause;
+
     public void EnergoButtonClick()
     {
-        energoButtonClick = true;
+        if (!gameOver.activeSelf)
+            if (!pause.activeSelf) energoButtonClick = true;
     }
 
     private void AllDie()
     {
         energoButtonText.text = energoTimer.ToString("0.0");
-        dieTimer -= Time.deltaTime;
         if (!alreadyAllDie)
         {
-            allDie = true;
+            DeleteAllFromScene();
             alreadyAllDie = true;
         }
-        else if (dieTimer < 0 && allDie)
-        {
-            allDie = false;
-        }
-            
+        dieTimer -= Time.deltaTime;
+        if (dieTimer < 0 && allDie) allDie = false;
+        EnergoButtonTime();
+    }
+
+    private void EnergoButtonTime()
+    {
         energoTimer -= Time.deltaTime;
         if (energoTimer < 0)
         {
@@ -90,28 +103,43 @@ public class programm : MonoBehaviour
             energoButtonText.text = "";
         }
     }
+    private void DeleteAllFromScene()
+    {
+        allDie = true;
+    }
     
+      
     public void SlowButtonClick()
     {
-        slowButtonClick = true;
+        if (!gameOver.activeSelf)
+            if (!pause.activeSelf) slowButtonClick = true;
     }
     private void AllSlow()
     {
-        slowButtonText.text = slowTimer.ToString("0.0");
-        if (slowTimer >= slowTime)
+        slowButtonText.text = slowRepeatTimer.ToString("0.0");
+        slowTimer -= Time.deltaTime;
+        if (slowTimer > 0)
         {
-            allSlow = true;
+            if (!allSlow) allSlow = true;
         }
-        if (slowTimer > 0) slowTimer -= Time.deltaTime;
-        if (slowTimer <= 0)
+        else
         {
-            allSlow = false;
+            if (allSlow) allSlow = false;
+        }
+        SlowButtonTime();
+    }
+    
+    private void SlowButtonTime()
+    {
+        slowRepeatTimer -= Time.deltaTime;
+        if (slowRepeatTimer < 0)
+        {
             slowTimer = slowTime;
+            slowRepeatTimer = slowRepeatTime;
             slowButtonClick = false;
             slowButtonText.text = "";
         }
     }
-
 
     private void Awake()
     {
@@ -127,6 +155,11 @@ public class programm : MonoBehaviour
         percentBuggy = 0;
         slowTimer = slowTime;
         energoTimer = energoTime;
+        readyText.text = "R: " + currentReady + "/" + finalReady;
+        bugedText.text = "B: " + currentBugs + "/" + maxBugs;
+        alreadyAllDie = false;
+        dieTimer = dieTime;
+        slowRepeatTimer = slowRepeatTime;
     }
     
     private void Update()
@@ -141,6 +174,10 @@ public class programm : MonoBehaviour
             newVersion = false;
         }
         scoreText.text = "Score: " + score.ToString();
+        if (Input.GetKey("escape"))
+        {
+            Pause();
+        }
     }
     
     
@@ -174,10 +211,9 @@ public class programm : MonoBehaviour
             currentReady += cb.force;
             currentBugs += cb.bugForce;
             percentReady = currentReady * 100 / finalReady;
-            
             percentBuggy = currentBugs * 100 / maxBugs;
-            
-            Debug.Log("Ready % = " + percentReady + ". Bug % = " + percentBuggy);
+            readyText.text = "R: " + currentReady + "/" + finalReady;
+            bugedText.text = "B: " + currentBugs + "/" + maxBugs;
             cb.DestroyOnEnterProgramm();
             if (currentBugs > maxBugs)
             {
@@ -191,21 +227,48 @@ public class programm : MonoBehaviour
                 percentReady = 0;
                 currentBugs = 0;
                 percentBuggy = 0;
-                
+                readyText.text = "R: " + currentReady + "/" + finalReady;
+                bugedText.text = "B: " + currentBugs + "/" + maxBugs;
             }
         }
     }
 
     private void GameOver()
     {
-        Debug.Log("AAAAA!!!");
+        gameOver.SetActive(true);
         allStop = true;
         allDie = true;
     }
+
+    public void Pause()
+    {
+        pause.SetActive(true);
+        allStop = true;
+    }
+    public void EndPause()
+    {
+        pause.SetActive(false);
+        allStop = false;
+    }
+    public void Exit()
+    {
+        SceneManager.LoadScene("TesterMenu");
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("TesterMainScene");
+    }
+    //later maybe
+    /*public void Records()
+    {
+        SceneManager.LoadScene("Records");
+    }*/
     private void NewVersion()
     {
         version += 1;
         finalReady = finalReady + riseOfHardnes;
+        maxBugs = maxBugs + riseOfHardnes;
         versionText.text = "V." + version;
         if (currentProgrammerPosition < programmerPositions.Length) AddProgrammer();
         

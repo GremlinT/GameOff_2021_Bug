@@ -206,7 +206,7 @@ public class codeBase : MonoBehaviour
 
     private void OnMouseDown()
     {
-        DestroyOnClick();
+        if (!PR.pause.activeSelf) DestroyOnClick();
     }
 
     float realSpeed;
