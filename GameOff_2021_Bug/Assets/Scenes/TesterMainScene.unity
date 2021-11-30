@@ -1392,9 +1392,9 @@ MonoBehaviour:
   allDie: 0
   allSlow: 0
   slowTime: 2
-  slowRepeatTime: 10
+  slowRepeatTime: 20
   slowRepeatTimer: 0
-  energoTime: 10
+  energoTime: 30
   dieTime: 0.2
   slowButtonText: {fileID: 1214645954}
   energoButtonText: {fileID: 510540582}

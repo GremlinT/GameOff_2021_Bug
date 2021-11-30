@@ -121,7 +121,7 @@ public class codeBase : MonoBehaviour
             force = (defaultForce + forceModif) * bigForce; //9+1*2 = 20
         }
         int randomBForce = Random.Range(1, 7);
-        if (randomBForce <= 3)
+        if (randomBForce <= 2)
         {
             clear = true;
             bugForce = 0;

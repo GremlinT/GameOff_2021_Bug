@@ -59,17 +59,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1486}
     - Class: 114
-      Script: {instanceID: 2074}
+      Script: {instanceID: 2072}
     - Class: 114
-      Script: {instanceID: 2444}
+      Script: {instanceID: 2442}
     - Class: 114
-      Script: {instanceID: 2590}
+      Script: {instanceID: 2588}
     - Class: 114
-      Script: {instanceID: 2760}
+      Script: {instanceID: 2758}
     - Class: 114
-      Script: {instanceID: 2776}
+      Script: {instanceID: 2774}
     - Class: 114
-      Script: {instanceID: 2972}
+      Script: {instanceID: 2970}
     - Class: 114
       Script: {instanceID: 3074}
     - Class: 114
@@ -120,19 +120,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1486}
     - Class: 114
-      Script: {instanceID: 2074}
+      Script: {instanceID: 2072}
     - Class: 114
-      Script: {instanceID: 2444}
+      Script: {instanceID: 2442}
     - Class: 114
-      Script: {instanceID: 2590}
+      Script: {instanceID: 2588}
     - Class: 114
-      Script: {instanceID: 2760}
+      Script: {instanceID: 2758}
     - Class: 114
-      Script: {instanceID: 2972}
+      Script: {instanceID: 2970}
+    - Class: 114
+      Script: {instanceID: 3058}
     - Class: 114
       Script: {instanceID: 3074}
-    - Class: 114
-      Script: {instanceID: 38762}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -410,6 +410,12 @@ ScriptsOnlyBuild:
     className: ToggleGroup
   - hash:
       serializedVersion: 2
+      Hash: c46a859b352cb27db26859da7c01f267
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GameMenu
+  - hash:
+      serializedVersion: 2
       Hash: 69415240821be7986b27e72bf9609a30
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -684,14 +690,8 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
-  - hash:
-      serializedVersion: 2
-      Hash: c46a859b352cb27db26859da7c01f267
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GameMenu
   platform: 5
   scenePathNames:
   - Assets/Scenes/TesterMenu.unity
   - Assets/Scenes/TesterMainScene.unity
-  playerPath: "C:/toxins/\u0425\u043E\u0431\u0431\u0438/\u0413\u0438\u0442 \u043F\u0440\u043E\u0435\u043A\u0442\u044B/GameOff_2021_Bug/GameOff_2021_Bug/builds/ver3/GameOff_2021_Bug.exe"
+  playerPath: "C:/toxins/\u0425\u043E\u0431\u0431\u0438/\u0413\u0438\u0442 \u043F\u0440\u043E\u0435\u043A\u0442\u044B/GameOff_2021_Bug/GameOff_2021_Bug/builds/ver4/GameOff_2021_Bug.exe"
